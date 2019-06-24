@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<title>Home</title>
+<div class="jumbotron text-center" style="background-color:white">
+  <div class="row">
+    <div class="col">
+      <div class="container" style="height:20rem;width:20rem">
+        <h4>Live Polls</h4>
+      <canvas id="myChart" width="80" height="80"></canvas>
+    <script type="text/javascript">
+      var labels = [];
+      var data = [];
+      {% for c in conts %}
+      labels.push('{{c.name}}' + ' | ' + Math.floor(parseFloat('{{c.votes}}') * 100/parseFloat('{{total}}')) + '%' );
+      data.push('{{c.votes}}');
+      {% endfor %}
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels:labels,
+            datasets: [{
+                label: '# of Votes',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132)',
+                    'rgba(54, 162, 235)',
+                    'green'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'green'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options:{
+          tooltips:{
+            mode:'index',
+            axis:'x'
+          }
+        }
+    });
+    </script>
+
+    </div>
+    </div>
+    <div class="col">
+      <div class="container-fluid text-center">
+
+        {% for c in conts %}
+        <div class="card">
+        <div class="media">
+        <img src="{{c.picurl}}" class="mr-3" width=70 height="70" alt="...">
+        <div class="media-body">
+          <h5 class="mt-0"> {{c.name}} | Age : {{c.age}} </h5>
+          {{c.desp}}
+        </div>
+      </div>
+        <a href="{{c.pk}}/vote" class="btn btn-primary" required name="button">Vote</a>
+
+      </div>
+      <br>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+{% endblock %}
